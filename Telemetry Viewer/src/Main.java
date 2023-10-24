@@ -86,10 +86,10 @@ public class Main {
 		window.add(ConfigureView.instance,     BorderLayout.EAST);
 		NotificationsController.showHintUntil("Start by connecting to a device or opening a file by using the buttons below.", () -> false, true);
 		
-		window.setSize(window.getPreferredSize());
+		window.setSize(1920+1920,1080);
 		window.setMinimumSize(window.getMinimumSize());
 		window.setLocationRelativeTo(null);
-		window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		//window.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		// support smooth scrolling
 		window.addWindowFocusListener(new WindowFocusListener() {
