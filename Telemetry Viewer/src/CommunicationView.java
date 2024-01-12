@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -29,9 +30,14 @@ public class CommunicationView extends JPanel {
 	
 	private JToggleButton settingsButton;
 	private JButton importButton;
+	private JButton importSFButton;
+	private JButton importLButton;
+	private JButton importAButton;
 	private JButton exportButton;
 	private JButton helpButton;
 	private JButton connectionButton;
+	private JButton DownButton;
+	private JButton UpButton;
 
 	/**
 	 * Private constructor to enforce singleton usage.
@@ -39,12 +45,60 @@ public class CommunicationView extends JPanel {
 	private CommunicationView () {
 		
 		super();
-		setLayout(new MigLayout("wrap 6, gap " + Theme.padding  + ", insets " + Theme.padding, "[][][][]push[]push[]"));
+		setLayout(new MigLayout("wrap 9, gap " + Theme.padding  + ", insets " + Theme.padding, "[][][][][][][][]push[]"));
+		
+		
+		
+		UpButton = new JButton("^");
+		UpButton.setFocusable(false);
+		UpButton.setRolloverEnabled(false);
+		UpButton.setBackground(Color.LIGHT_GRAY);
+		UpButton.addActionListener(event -> {
+			redraw();
+		});
 		
 		// settings
 		settingsButton = new JToggleButton("Settings");
+		settingsButton.setFocusable(false);
 		settingsButton.setSelected(SettingsView.instance.isVisible());
 		settingsButton.addActionListener(event -> showSettings(settingsButton.isSelected()));
+		
+		//import static fire config
+		importSFButton = new JButton("Static Fire");
+		importSFButton.setFocusable(false);
+		importSFButton.setRolloverEnabled(false);
+		importSFButton.setBackground(Color.LIGHT_GRAY);
+		importSFButton.addActionListener(event -> {
+			String[] files = {"/home/kxr/Desktop/test.txt"};
+			ConnectionsController.importFiles(files);
+		});
+		
+		//import launch config
+		importLButton = new JButton("Launch");
+		
+		importLButton.addActionListener(event -> {
+			String[] files = {"/home/kxr/Desktop/test.txt"};
+			ConnectionsController.importFiles(files);
+		});
+		
+		//import avionics config
+		importAButton = new JButton("Avionics");
+		importAButton.addActionListener(event -> {
+			String[] files = {"/home/kxr/Desktop/test.txt"};
+			ConnectionsController.importFiles(files);
+		});
+		
+		DownButton = new JButton("V");
+		DownButton.setFocusable(false);
+		DownButton.setRolloverEnabled(false);
+		DownButton.setBackground(Color.LIGHT_GRAY);
+		DownButton.addActionListener(event -> {
+			removeAll();
+			repaint();
+			add(UpButton);
+			
+		});
+		
 		
 		// import
 		importButton = new JButton("Import");
@@ -211,13 +265,17 @@ public class CommunicationView extends JPanel {
 			exportButton.setEnabled(!ConnectionsController.importing && !ConnectionsController.exporting && connectionsDefined);
 			
 			removeAll();
+			add(DownButton);
 			add(settingsButton);
+			add(importSFButton);
+			add(importLButton);
+			add(importAButton);
 			add(importButton);
 			add(exportButton);
 			add(helpButton);
 			add(connectionButton);
 			for(int i = 0; i < ConnectionsController.allConnections.size(); i++)
-				add(ConnectionsController.allConnections.get(i).getGui(), "align right, cell 5 " + i);
+				add(ConnectionsController.allConnections.get(i).getGui(), "align right, cell 7 " + i);
 			
 			boolean importing = ConnectionsController.importing;
 			boolean exporting = ConnectionsController.exporting;
@@ -250,7 +308,15 @@ public class CommunicationView extends JPanel {
 			
 			revalidate();
 			repaint();
-		
+			
+			
+			
+			
+			//This is how to hide the bottom
+			//removeAll();
+			//***********
+			
+			
 			// also redraw the SettingsView because it contains the transmit GUIs
 			SettingsView.instance.setVisible(SettingsView.instance.isVisible());
 			
