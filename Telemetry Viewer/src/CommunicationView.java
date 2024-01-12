@@ -96,6 +96,7 @@ public class CommunicationView extends JPanel {
 			removeAll();
 			repaint();
 			add(UpButton);
+			//TODO currently has some problems can sometimes not show up button makeing it unusable
 			
 		});
 		
@@ -308,14 +309,6 @@ public class CommunicationView extends JPanel {
 			
 			revalidate();
 			repaint();
-			
-			
-			
-			
-			//This is how to hide the bottom
-			//removeAll();
-			//***********
-			
 			
 			// also redraw the SettingsView because it contains the transmit GUIs
 			SettingsView.instance.setVisible(SettingsView.instance.isVisible());
