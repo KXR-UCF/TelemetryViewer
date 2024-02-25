@@ -45,7 +45,7 @@ public class CommunicationView extends JPanel {
 	private CommunicationView () {
 		
 		super();
-		setLayout(new MigLayout("wrap 9, gap " + Theme.padding  + ", insets " + Theme.padding, "[][][][][][][][]push[]"));
+		setLayout(new MigLayout("wrap 8, gap " + Theme.padding  + ", insets " + Theme.padding, "[][][][][][][]push[]"));
 		
 		
 		
@@ -69,22 +69,21 @@ public class CommunicationView extends JPanel {
 		importSFButton.setRolloverEnabled(false);
 		importSFButton.setBackground(Color.LIGHT_GRAY);
 		importSFButton.addActionListener(event -> {
-			String[] files = {"/home/kxr/Desktop/test.txt"};
+			String[] files = {"/home/kxr/Desktop/staticfire.txt"};
 			ConnectionsController.importFiles(files);
 		});
 		
 		//import launch config
 		importLButton = new JButton("Launch");
-		
 		importLButton.addActionListener(event -> {
-			String[] files = {"/home/kxr/Desktop/test.txt"};
+			String[] files = {"/home/kxr/Desktop/launch.txt"};
 			ConnectionsController.importFiles(files);
 		});
 		
 		//import avionics config
 		importAButton = new JButton("Avionics");
 		importAButton.addActionListener(event -> {
-			String[] files = {"/home/kxr/Desktop/test.txt"};
+			String[] files = {"/home/kxr/Desktop/avionics.txt"};
 			ConnectionsController.importFiles(files);
 		});
 		
@@ -96,7 +95,7 @@ public class CommunicationView extends JPanel {
 			removeAll();
 			repaint();
 			add(UpButton);
-			//TODO currently has some problems can sometimes not show up button makeing it unusable
+			//TODO currently has some problems can sometimes not show up button making it unusable
 			
 		});
 		
@@ -248,6 +247,8 @@ public class CommunicationView extends JPanel {
 		// show the components
 		redraw();
 		
+		
+		
 	}
 	
 	public void redraw() {
@@ -273,7 +274,7 @@ public class CommunicationView extends JPanel {
 			add(importAButton);
 			add(importButton);
 			add(exportButton);
-			add(helpButton);
+			//add(helpButton);
 			add(connectionButton);
 			for(int i = 0; i < ConnectionsController.allConnections.size(); i++)
 				add(ConnectionsController.allConnections.get(i).getGui(), "align right, cell 7 " + i);

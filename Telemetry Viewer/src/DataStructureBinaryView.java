@@ -214,7 +214,7 @@ public class DataStructureBinaryView extends JPanel {
 				
 				if(((DatasetsController.BinaryFieldProcessor) processor).toString().endsWith("Bitfield") && errorMessage == null) {
 
-					BitfieldPanel bitfieldPanel = new BitfieldPanel(((DatasetsController.BinaryFieldProcessor) processor).getByteCount() * 8, connection.datasets.getByLocation(location));
+					BitfieldPanel bitfieldPanel = new BitfieldPanel(((DatasetsController.BinaryFieldProcessor) processor).getByteCount() * 8, connection.datasets.getByName(name));
 					
 					removeAll();
 					add(dsdLabel, "grow, span");
@@ -389,7 +389,7 @@ public class DataStructureBinaryView extends JPanel {
 						conversionFactorAtextfield.setText(Float.toString(dataset.conversionFactorA));
 						conversionFactorBtextfield.setText(Float.toString(dataset.conversionFactorB));
 						connection.datasets.removeAllData();
-						connection.datasets.remove(dataset.location);
+						connection.datasets.remove(dataset.name);
 					}
 				} else {
 					// remove button for the checksum was clicked

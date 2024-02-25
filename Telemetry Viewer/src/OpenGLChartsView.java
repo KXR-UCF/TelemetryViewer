@@ -227,6 +227,7 @@ public class OpenGLChartsView extends JPanel {
 				displayScalingFactorJava9 = (float) ((Graphics2D) getGraphics()).getTransform().getScaleX();
 				width = (int) (width * displayScalingFactorJava9);
 				height = (int) (height * displayScalingFactorJava9);
+				
 				gl.glViewport(0, 0, width, height);
 				
 				OpenGL.makeOrthoMatrix(screenMatrix, 0, width, 0, height, -100000, 100000);

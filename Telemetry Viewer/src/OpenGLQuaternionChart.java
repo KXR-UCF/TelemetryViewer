@@ -15,7 +15,7 @@ import com.jogamp.opengl.math.Quaternion;
 public class OpenGLQuaternionChart extends PositionedChart {
 
 	FloatBuffer shape; // triangles: x1,y1,z1,u1,v1,w1,...
-	
+	FloatBuffer sha; 
 	// plot region
 	float xPlotLeft;
 	float xPlotRight;
@@ -23,7 +23,8 @@ public class OpenGLQuaternionChart extends PositionedChart {
 	float yPlotTop;
 	float yPlotBottom;
 	float plotHeight;
-	
+	int testlen = 0;
+	int n = 1;
 	// text label
 	boolean showTextLabel;
 	String textLabel;
@@ -49,6 +50,7 @@ public class OpenGLQuaternionChart extends PositionedChart {
 		duration = 1;
 		
 		shape = ChartUtils.getShapeFromAsciiStl(getClass().getResourceAsStream("monkey.stl"));
+		sha = ChartUtils.getShapeFromAsciiStl(getClass().getResourceAsStream("monkey.stl"));
 		
 		// create the control widgets and event handlers
 		datasetsWidget = new WidgetDatasets(newDatasets -> datasets.setNormals(newDatasets),
@@ -75,6 +77,23 @@ public class OpenGLQuaternionChart extends PositionedChart {
 		// sanity check
 		if(datasets.normalsCount() != 4)
 			return null;
+		
+		
+		
+		
+		
+			
+			n++;
+			if(n>5000) {
+				n=1;
+			}
+		
+		testlen++;
+		
+		//OpenGL.drawTrianglesXYZUVW(gl, GL3.GL_TRIANGLES, sha.position(1), sha.capacity()/4);
+
+		//OpenGL.drawTrianglesXYRGBA(gl, mouseX, sha, mouseY);
+		
 		
 		// determine which sample to use
 		int lastSampleNumber = datasets.connection.getSampleCount() - 1;
@@ -120,22 +139,41 @@ public class OpenGLQuaternionChart extends PositionedChart {
 			yPlotTop -= delta / 2;
 			plotHeight = yPlotTop - yPlotBottom;
 		}
+
+
+		
+		
+		float[] modMatrix = Arrays.copyOf(chartMatrix, 16);
+		OpenGL.translateMatrix(modMatrix, (plotWidth/2f) + xPlotLeft + n, (plotHeight/2f) + yPlotBottom, (plotHeight/2f));
+		OpenGL.scaleMatrix    (modMatrix, (plotWidth/2f),             (plotHeight/2f),               (plotHeight/2f));
+		
+		System.out.println(plotWidth);
+		// draw the monkey
+		OpenGL.useMatrix(gl, modMatrix);
+		OpenGL.drawTrianglesXYZUVW(gl, GL3.GL_TRIANGLE_STRIP, sha.position(0), sha.capacity() / 6);
+		
+		
+		
+		
 		
 		float[] quatMatrix = new float[16];
 		new Quaternion(q[1], q[2], q[3], q[0]).toMatrix(quatMatrix, 0); // x,y,z,w
 		
 		// adjust the modelview matrix to map the vertices' local space (-1 to +1) into chart space
-		// x = x * (plotWidth / 2)  + (plotWidth / 2)
+		//x = x * (plotWidth / 2)  + (plotWidth / 2)
 		// y = y * (plotHeight / 2) + (plotHeight / 2)
 		// z = z * (plotHeight / 2) + (plotHeight / 2)
 		float[] modelMatrix = Arrays.copyOf(chartMatrix, 16);
 		OpenGL.translateMatrix(modelMatrix, (plotWidth/2f) + xPlotLeft, (plotHeight/2f) + yPlotBottom, (plotHeight/2f));
-		OpenGL.scaleMatrix    (modelMatrix, (plotWidth/2f),             (plotHeight/2f),               (plotHeight/2f));
+		OpenGL.scaleMatrix    (modelMatrix, (plotWidth/8f),             (plotHeight/8f),               (plotHeight/8f));
+		
+		
+		
+		
 		
 		// rotate the camera
 		OpenGL.rotateMatrix(modelMatrix, 180, 0, 0, 1);
 		OpenGL.rotateMatrix(modelMatrix,  90, 1, 0, 0);
-		
 		// apply the quaternion rotation
 		OpenGL.multiplyMatrix(modelMatrix, quatMatrix);
 		
@@ -147,7 +185,7 @@ public class OpenGLQuaternionChart extends PositionedChart {
 		
 		// draw the monkey
 		OpenGL.useMatrix(gl, modelMatrix);
-		OpenGL.drawTrianglesXYZUVW(gl, GL3.GL_TRIANGLES, shape.position(0), shape.capacity() / 6);
+		OpenGL.drawTrianglesXYZUVW(gl, GL3.GL_TRIANGLE_STRIP, shape.position(0), shape.capacity() / 6);
 		
 		OpenGL.useMatrix(gl, chartMatrix);
 
