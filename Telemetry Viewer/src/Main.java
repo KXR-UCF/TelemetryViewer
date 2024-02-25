@@ -72,6 +72,8 @@ public class Main {
 	@SuppressWarnings("serial")
 	public static void main(String[] args) {
 		
+		
+		
 		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch(Exception e){}
 		
 		// create the cache folder
@@ -114,6 +116,8 @@ public class Main {
 				}
 			}
 		});
+		
+		
 		
 		// handle window close events
 		window.addWindowListener(new WindowAdapter() {

@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class DatasetsController {
 
 	public ConnectionTelemetry connection;
-	private Map<Integer, Dataset> datasets = new TreeMap<Integer, Dataset>();
+	private Map<String, Dataset> datasets = new TreeMap<String, Dataset>();
 	private AtomicInteger sampleCount = new AtomicInteger(0);
 	private StorageTimestamps timestamps;
 	private long firstTimestamp = 0;
@@ -215,6 +215,13 @@ public class DatasetsController {
 
 	}
 	
+	
+	
+	public Dataset getByName(String name) {
+		//if(name.equals())
+		return datasets.get(name);
+
+	}
 	/**
 	 * Creates and stores a new Dataset.
 	 * 
@@ -237,7 +244,7 @@ public class DatasetsController {
 					return "Error: A field already exists at column " + location + ".";
 			
 			// add the field
-			datasets.put(location, new Dataset(connection, location, processor, name, color, unit, conversionFactorA, conversionFactorB));
+			datasets.put(name, new Dataset(connection, location, processor, name, color, unit, conversionFactorA, conversionFactorB));
 			return null;
 			
 		} else {
@@ -266,7 +273,7 @@ public class DatasetsController {
 			}
 			
 			// add the field
-			datasets.put(location, new Dataset(connection, location, processor, name, color, unit, conversionFactorA, conversionFactorB));
+			datasets.put(name, new Dataset(connection, location, processor, name, color, unit, conversionFactorA, conversionFactorB));
 			return null;
 			
 		}
@@ -281,15 +288,15 @@ public class DatasetsController {
 	 * @param location    CSV column number, or Binary packet byte offset.
 	 * @return            null on success, or a user-friendly String describing why the field could not be removed.
 	 */
-	public String remove(int location) {
+	public String remove(String name) {
 		
 		// ensure the configure panel isn't open
 		ConfigureView.instance.close();
 		
 		// can't remove what doesn't exist
-		Dataset dataset = getByLocation(location);
+		Dataset dataset = getByName(name);
 		if(dataset == null)
-			return "Error: No field exists at location " + location + ".";
+			return "Error: No field exists at location " + name + ".";
 		
 		// remove charts containing the dataset
 		List<PositionedChart> chartsToRemove = new ArrayList<PositionedChart>();
@@ -299,7 +306,7 @@ public class DatasetsController {
 		});
 		chartsToRemove.forEach(chart -> ChartsController.removeChart(chart));
 		
-		datasets.remove(location);
+		datasets.remove(name);
 		dataset.floats.dispose();
 		
 		// remove timestamps if nothing is left
@@ -327,7 +334,7 @@ public class DatasetsController {
 	public void removeAll() {
 		
 		for(Dataset dataset : getList())
-			remove(dataset.location);
+			remove(dataset.name);
 		
 		removeChecksum();
 		
@@ -515,7 +522,8 @@ public class DatasetsController {
 	public int getFirstAvailableLocation() {
 		
 		if(connection.isCsvMode()) {
-			
+			return 1;
+			/*
 			// the packet is empty
 			if(getList().isEmpty())
 				return 0;
@@ -526,12 +534,13 @@ public class DatasetsController {
 				if(d.location > maxOccupiedLocation)
 					maxOccupiedLocation = d.location;
 			for(int i = 0; i < maxOccupiedLocation; i++)
+				//this errors out but we wont use csv mode so im not fixing this
 				if(getByLocation(i) == null)
 					return i;
 			
 			// layout is not sparse
 			return maxOccupiedLocation + 1;
-			
+			*/
 		} else {
 			
 			// the packet is empty

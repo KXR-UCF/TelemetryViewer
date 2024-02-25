@@ -639,9 +639,9 @@ public class WidgetTrigger extends Widget {
 		if(channelCombobox.getItemCount() != 0 || !channel.equals("")) {
 			try {
 				int connectionN = Integer.parseInt(channel.split(" ")[1]);
-				int datasetLocationN = Integer.parseInt(channel.split(" ")[3]);
+				String datasetLocationN = channel.split(" ")[3];
 				ConnectionTelemetry connection = (ConnectionTelemetry) ConnectionsController.allConnections.get(connectionN);
-				Dataset dataset = connection.datasets.getByLocation(datasetLocationN);
+				Dataset dataset = connection.datasets.getByName(datasetLocationN);
 				setChannel(dataset, false);
 			} catch(Exception e) {
 				throw new AssertionError("Invalid trigger channel.");

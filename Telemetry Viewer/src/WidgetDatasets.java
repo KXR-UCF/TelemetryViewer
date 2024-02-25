@@ -432,9 +432,12 @@ public class WidgetDatasets extends Widget {
 				if(comboboxLabels != null && tokens.length != comboboxLabels.length)
 					throw new Exception();
 				for(String token : tokens) {
+					System.out.println(token);
 					int connectionN = Integer.parseInt(token.split(" ")[1]);
-					int locationN   = Integer.parseInt(token.split(" ")[3]);
-					Dataset d = ConnectionsController.telemetryConnections.get(connectionN).datasets.getByLocation(locationN);
+					String locationN   = token.split(" ")[3];
+					//int locationN = Integer.parseInt(token.split(" ")[3]);
+					//Dataset d = ConnectionsController.telemetryConnections.get(connectionN).datasets.getByLocation(locationN);
+					Dataset d = ConnectionsController.telemetryConnections.get(connectionN).datasets.getByName(locationN);
 					if(d == null)
 						throw new Exception();
 					selectedDatasets.add(d);
@@ -528,7 +531,7 @@ public class WidgetDatasets extends Widget {
 		// selected datasets
 		lines[0] = new String("datasets = ");
 		for(Dataset d : selectedDatasets)
-			lines[0] += "connection " + ConnectionsController.telemetryConnections.indexOf(d.connection) + " location " + d.location + ",";
+			lines[0] += "connection " + ConnectionsController.telemetryConnections.indexOf(d.connection) + " name " + d.name + ",";
 		if(lines[0].endsWith(","))
 			lines[0] = lines[0].substring(0, lines[0].length() - 1);
 		

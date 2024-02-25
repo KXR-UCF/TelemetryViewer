@@ -249,7 +249,7 @@ public class DataStructureCsvView extends JPanel {
 					conversionFactorAtextfield.setText(Float.toString(dataset.conversionFactorA));
 					conversionFactorBtextfield.setText(Float.toString(dataset.conversionFactorB));
 					datasets.removeAllData();
-					datasets.remove(dataset.location);
+					datasets.remove(dataset.name);
 				}
 				dataStructureTable.clearSelection();
 				updateGui(false);
