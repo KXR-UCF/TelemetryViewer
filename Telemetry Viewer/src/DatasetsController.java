@@ -209,12 +209,14 @@ public class DatasetsController {
 	 * @param location    CSV column number, or Binary packet byte offset. (Locations may be sparse.)
 	 * @return            The Dataset, or null if it does not exist.
 	 */
+	
+	/**
 	public Dataset getByLocation(int location) {
 		
 		return datasets.get(location);
 
 	}
-	
+	*/
 	
 	
 	public Dataset getByName(String name) {

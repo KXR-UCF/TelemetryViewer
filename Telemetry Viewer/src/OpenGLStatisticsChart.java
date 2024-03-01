@@ -47,6 +47,11 @@ public class OpenGLStatisticsChart extends PositionedChart {
 	WidgetCheckbox percentileWidget;
 	WidgetCheckbox showDurationWidget;
 	
+	//Colors RGBA
+	float[] red = {255,0,0,(float) 0.5};
+	float[] green = {0,255,0,(float) 0.5};
+	float[] blue = {0,0,255,(float) 0.5};
+	float[] yellow = {255,255,0,(float) 0.5};
 	@Override public String toString() {
 		
 		return "Statistics";
@@ -320,6 +325,51 @@ public class OpenGLStatisticsChart extends PositionedChart {
 		if(sampleCount > 0)
 			for(int datasetN = 0; datasetN < datasetsCount; datasetN++) {
 				
+				
+				int valveX = (int)(width/3);
+				int tankX = (int)(width/6);
+				int inc = (int)(height/20);
+				int scale =(int)(height/40);
+				
+		//Air
+				OpenGL.drawBoxOutline(gl, red, 75, 75, 700, 500);
+				int solY = (int)height/2+(inc*2);
+				drawSolenoid(gl,scale,valveX,solY,red,"S-Nox Vent");
+				drawSolenoid(gl,scale,valveX,solY+inc,red,"SNox Fill");
+				drawSolenoid(gl,scale,valveX,solY+(inc*2),red,"S-Nitrogen Vent");
+				drawSolenoid(gl,scale,valveX,solY+(inc*3),red,"S-Nitrogen Fill");
+				drawSolenoid(gl,scale,valveX,solY+(inc*4),red,"S-Nox QD");
+				drawSolenoid(gl,scale,valveX,solY+(inc*5),red,"S-Nitrogen QD");
+				drawSolenoid(gl,scale,valveX,solY+(inc*6),red,"S-Irec");
+				
+				//Air
+				drawTank(gl,scale,tankX,solY+inc,red,10,10);
+				
+		//Wanda 
+				OpenGL.drawBoxOutline(gl, red, 75, 75, 700, 500);
+				
+				drawRBallValve(gl,scale,valveX,inc*2,red,"NOX-Fill");
+				drawRBallValve(gl,scale,valveX,inc*4,red,"NOX-Vent");
+				drawRBallValve(gl,scale,valveX,inc*6,red,"N-FIll");
+				drawRBallValve(gl,scale,valveX,inc*8,red,"N-Vent");
+				
+				//Nox Tank
+				drawTank(gl,scale,tankX,inc,yellow,width,height);
+				//Nitrogen Tank
+				drawTank(gl,scale,tankX,inc*6,blue,10,10);
+				
+		//Rocket
+				OpenGL.drawBoxOutline(gl, red, 1, 1, width-1, height-1);
+				
+				
+				//Nox Rocket
+				drawTank(gl,scale,width/4*3,height/2-inc*4,yellow,10,10);
+				//Nitrogen Rocket
+				drawTank(gl,scale,width/4*3,height/2+inc,blue,10,10);			
+				
+				drawRBallValve(gl,scale,width/4*3,inc*16,red,"N-Vent");
+				
+				
 				int column = datasetN + 1;
 				
 				x += (int) (2*Theme.tilePadding);
@@ -401,6 +451,26 @@ public class OpenGLStatisticsChart extends PositionedChart {
 		
 		return handler;
 		
+	}
+	public void drawSolenoid(GL2ES3 gl,int size, int x,int y,float[] color, String name) {
+		OpenGL.drawTriangle2D(gl, color , x, y, x, y+size, x+size, y+(size/2));
+		OpenGL.drawTriangle2D(gl, color , x+(2*size), y, x+(2*size), y+size, x+size, y+(size/2));
+		OpenGL.drawSmallText(gl,name,x,y-7, 0);
+	}
+	public void drawRBallValve(GL2ES3 gl,int size, int x,int y,float[] color, String name) {
+		OpenGL.drawTriangle2D(gl, color , x, y, x, y+size, x+size, y+(size/2));
+		OpenGL.drawTriangle2D(gl, color , x+(2*size), y, x+(2*size), y+size, x+size, y+(size/2));
+		OpenGL.drawBox(gl, color, x+size-size/4, y+size, size/2, size/2);
+		OpenGL.drawSmallText(gl,name,x,y-7, 0);
+	}
+	
+	public void drawTank(GL2ES3 gl,int size, int x,int y,float[] color,int pressure, int temperature) {
+		size = size * 8;
+		OpenGL.drawBox(gl, color, x, y, size/4, size);
+		String press = Integer.toString(pressure) + "psi";
+		String temp = Integer.toString(temperature) + "° F";
+		OpenGL.drawSmallText(gl,press,x+5,y+(size/3)*2, 0);
+		OpenGL.drawSmallText(gl,temp,x+size/10,y+size/3, 0);
 	}
 
 }
