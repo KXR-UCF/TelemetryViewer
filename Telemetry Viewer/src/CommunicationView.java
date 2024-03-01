@@ -69,7 +69,7 @@ public class CommunicationView extends JPanel {
 		importSFButton.setRolloverEnabled(false);
 		importSFButton.setBackground(Color.LIGHT_GRAY);
 		importSFButton.addActionListener(event -> {
-			String[] files = {"/home/kxr/Desktop/staticfire.txt"};
+			String[] files = {"~/Desktop/test.txt"};
 			ConnectionsController.importFiles(files);
 		});
 		
